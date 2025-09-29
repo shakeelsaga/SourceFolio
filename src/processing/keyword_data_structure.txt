@@ -1,0 +1,57 @@
+ data = {
+    "key1": {
+        "wiki": {
+            "is_detailed": False,
+            "data": {
+                "title": "",
+                "content": "",
+                "url": ""
+            }
+        },
+        "news": [
+            {
+                "title": "",
+                "description": "",
+                "url": "",
+                "source": "",
+                "publishedAt": ""
+            }
+        ],
+        "olib": [
+            {
+                "title": "",
+                "author": "",
+                "first_publish_year": None,
+                "isbn": ""
+            }
+        ]
+    },
+
+    "key2": {
+        "wiki": {
+            "is_detailed": False,
+            "data": {
+                "title": "",
+                "content": "",
+                "url": ""
+            }
+        },
+        "news": [
+            {
+                "title": "",
+                "description": "",
+                "url": "",
+                "source": "",
+                "publishedAt": ""
+            }
+        ],
+        "olib": [
+            {
+                "title": "",
+                "author": "",
+                "first_publish_year": None,
+                "isbn": ""
+            }
+        ]
+    }
+}

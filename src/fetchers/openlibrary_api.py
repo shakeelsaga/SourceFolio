@@ -1,0 +1,28 @@
+import requests
+
+BASE_URL = "https://openlibrary.org/search.json"
+
+def get_books(keyword, limit=5):
+    """Fetch book results for a given keyword from OpenLibrary."""
+    url = f"{BASE_URL}?q={keyword}"
+    response = requests.get(url)
+
+    if response.status_code != 200:
+        raise Exception(f"OpenLibrary request failed: {response.status_code}")
+
+    data = response.json()
+    docs = data.get("docs", [])
+
+    books = []
+    for doc in docs[:limit]:
+        books.append({
+            "title": doc.get("title"),
+            "author": ", ".join(doc.get("author_name", [])) if doc.get("author_name") else "Unknown",
+            "first_publish_year": doc.get("first_publish_year"),
+            "isbn": doc.get("isbn", ["N/A"])[0]
+        })
+    return books
+
+if __name__ == "__main__":
+    bokkies = get_books("shakespere")
+    print(bokkies)

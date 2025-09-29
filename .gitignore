@@ -1,0 +1,28 @@
+# ==================================
+# General Python/System Files
+# ==================================
+
+# Byte-compiled/optimized files
+__pycache__/
+*.pyc
+
+# macOS specific files
+.DS_Store
+
+# Distribution / build directories
+/dist/
+/build/
+
+# Environment variables (recommended)
+.env
+
+# ==================================
+# Project-Specific Exclusions
+# ==================================
+
+# Backup/test scripts and old versions
+/src/bts/
+
+# Script for downloading images (and the images folder it creates)
+/src/processing/download_images.py
+/src/processing/images/
