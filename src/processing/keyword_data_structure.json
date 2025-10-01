@@ -1,7 +1,7 @@
- data = {
+{
     "key1": {
         "wiki": {
-            "is_detailed": False,
+            "is_detailed": false,
             "data": {
                 "title": "",
                 "content": "",
@@ -21,15 +21,17 @@
             {
                 "title": "",
                 "author": "",
-                "first_publish_year": None,
-                "isbn": ""
+                "first_publish_year": null,
+                "isbn": "",
+                "link": "",
+                "edition_link": "",
+                "cover_image": ""
             }
         ]
     },
-
     "key2": {
         "wiki": {
-            "is_detailed": False,
+            "is_detailed": false,
             "data": {
                 "title": "",
                 "content": "",
@@ -49,8 +51,11 @@
             {
                 "title": "",
                 "author": "",
-                "first_publish_year": None,
-                "isbn": ""
+                "first_publish_year": null,
+                "isbn": "",
+                "link": "",
+                "edition_link": "",
+                "cover_image": ""
             }
         ]
     }

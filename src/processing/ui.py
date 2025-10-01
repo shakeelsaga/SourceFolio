@@ -21,7 +21,7 @@ rich_tracebacks(show_locals=False)
 app = typer.Typer(help="Research Collector CLI")
 
 def splash():
-    console.rule("[primary]Research Collector", style="primary")
+    console.rule("[primary]SourceFolio", style="primary")
     console.print("[secondary]A fast research assistant for Wikipedia, Books, and News[/secondary]\n")
 
 def prompt_keywords(existing: List[str] | None = None) -> List[str]:

@@ -173,7 +173,7 @@ console.print("\n[success]Data collection done![/success]")
 
 preview_selection(data)
 
-console.rule("[primary]Export Step[/primary]")
+console.rule("[primary]Export[/primary]")
 console.print("\n[secondary]Data collection complete. Next step: export (PDF/CSV).[/secondary]\n")
 
 export_choice = inquirer.select(
