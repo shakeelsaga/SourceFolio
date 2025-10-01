@@ -24,7 +24,7 @@ class ReportDocTemplate(BaseDocTemplate):
 
     def _add_footer(self, canvas, doc):
         canvas.saveState()
-        footer_text = "Powered by YourProjectName"
+        footer_text = "Powered by sourcefolio"
         canvas.setFont('Helvetica', 8)
         canvas.drawRightString(self.pagesize[0] - cm, cm / 2, footer_text)
         canvas.restoreState()
@@ -82,34 +82,45 @@ def export_to_pdf(data, filename="research_output.pdf"):
         story.append(Spacer(1, 12))
 
         # Books
+        # Books
         story.append(Paragraph("Books to Refer", h2))
         if sections["olib"]:
-            books_list = [
-                ListItem(Paragraph(f"<b>{b.get('title')}</b> by {utils.format_author(b.get('author'))} ({b.get('first_publish_year')})", normal))
-                for b in sections["olib"][:5]
-            ]
+            books_list = []
+            for b in sections["olib"][:5]:
+                # Choose the best available link for the book
+                book_link = b.get("edition_link") or b.get("link", "")
+                book_text = f"<b>{b.get('title')}</b> by {utils.format_author(b.get('author'))} ({b.get('first_publish_year')})"
+                
+                # If a link exists, wrap the text in a hyperlink tag
+                if book_link:
+                    book_text = f'<link href="{book_link}">{book_text}</link>'
+                
+                books_list.append(ListItem(Paragraph(book_text, normal)))
+
             story.append(ListFlowable(books_list, bulletType='1', bulletFormat='%s.', bulletFontSize=normal.fontSize))
         else:
             story.append(Paragraph("No books found.", normal))
         story.append(Spacer(1, 12))
 
         # News
+        # News
         story.append(Paragraph("Recent News", h2))
         if sections["news"]:
             news_list = []
             for a in sections["news"][:5]:
                 headline = a.get("title", "N/A")
-                src = a.get("source")
-                if isinstance(src, dict):
-                    source = src.get("name", "Unknown")
-                elif isinstance(src, str):
-                    source = src
-                else:
-                    source = "Unknown"
+                source = a.get("source", "Unknown") 
                 desc = a.get("description", "")
+                news_url = a.get("url", "")
+                
                 text = f"<b>{headline}</b> ({source})"
                 if desc:
                     text += f" - {desc}"
+                
+                # If a URL exists, wrap the text in a hyperlink tag
+                if news_url:
+                    text = f'<link href="{news_url}">{text}</link>'
+                
                 news_list.append(ListItem(Paragraph(text, normal)))
             story.append(ListFlowable(news_list, bulletType='a', bulletFormat='%s.', bulletFontSize=normal.fontSize))
         else:

@@ -19,7 +19,10 @@ def get_books(keyword, limit=5):
             "title": doc.get("title"),
             "author": ", ".join(doc.get("author_name", [])) if doc.get("author_name") else "Unknown",
             "first_publish_year": doc.get("first_publish_year"),
-            "isbn": doc.get("isbn", ["N/A"])[0]
+            "isbn": doc.get("isbn", ["N/A"])[0],
+            "link": f"https://openlibrary.org{doc.get('key')}" if doc.get("key") else None,
+            "edition_link": f"https://openlibrary.org/books/{doc.get('cover_edition_key')}" if doc.get("cover_edition_key") else None,
+            "cover_image": f"https://covers.openlibrary.org/b/id/{doc.get('cover_i')}-L.jpg" if doc.get("cover_i") else None
         })
     return books
 
