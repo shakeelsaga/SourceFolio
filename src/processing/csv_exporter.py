@@ -8,7 +8,6 @@ console = Console()
 def export_to_csv(data, filename="research_output.csv"):
     with open(filename, mode="w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
-        # Write header
         writer.writerow(
             [
                 "Keyword",
@@ -20,7 +19,6 @@ def export_to_csv(data, filename="research_output.csv"):
                 "Published At",
             ]
         )
-        # Write rows
         for keyword, content in data.items():
             # Wikipedia
             if "wiki" in content:

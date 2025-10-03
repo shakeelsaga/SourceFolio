@@ -33,6 +33,7 @@ app = typer.Typer(help="Research Collector CLI")
 
 def splash():
     console.rule("[primary]SourceFolio", style="primary")
+    console.print()
     console.print(
         "[secondary]A fast research assistant for Wikipedia, Books, and News[/secondary]\n"
     )
@@ -45,7 +46,10 @@ def prompt_keywords(existing: List[str] | None = None) -> List[str]:
     ).execute()
     if not kw_str.strip():
         kw_str = (
-            inquirer.editor(message="Enter keywords (one per line):").execute() or ""
+            inquirer.text(
+                message="Enter keywords (one per line, press Ctrl+D when done):",
+                multiline=True,
+            ).execute() or ""
         )
     kws = [k.strip() for k in kw_str.replace("\n", ",").split(",") if k.strip()]
     return kws
@@ -70,12 +74,11 @@ def preview_selection(data_model: Dict[str, Dict[str, Any]]):
         title = sections["wiki"]["data"].get("title") or "—"
         bn = f"{len(sections.get('olib', []))} books, {len(sections.get('news', []))} articles"
         table.add_row(key, title, bn)
-    console.print(Panel(table, title="Preview", border_style="primary"))
+    console.print(Panel(table, title="[primary]Preview[/primary]", border_style="primary"))
 
 @app.command()
 def run():
     splash()
-    # we’ll call your main3 logic here step by step
 
 
 if __name__ == "__main__":

@@ -54,7 +54,6 @@ def export_to_pdf(data, filename="research_output.pdf"):
 
     story = []
 
-    # Table of Contents
     toc = TableOfContents()
     toc.levelStyles = [
         ParagraphStyle(
@@ -99,13 +98,11 @@ def export_to_pdf(data, filename="research_output.pdf"):
     story.append(toc)
     story.append(PageBreak())
 
-    # Content for each keyword
     for i, (key, sections) in enumerate(data.items(), start=1):
         doc.current_keyword = key
         story.append(Paragraph(f"{i}. {key}", h1))
         story.append(Spacer(1, 6))
 
-        # Summary / Details
         story.append(
             Paragraph(
                 f"Full Details" if sections["wiki"]["is_detailed"] else "Summary", h2
@@ -113,7 +110,6 @@ def export_to_pdf(data, filename="research_output.pdf"):
         )
         if sections["wiki"]["data"]:
             wiki = sections["wiki"]["data"]
-            # story.append(Paragraph(f"<b>Title:</b> {wiki.get('title','N/A')}", normal))
             content = wiki.get("content", "N/A")
             if content and isinstance(content, str):
                 for para in content.split("\n\n"):
@@ -134,16 +130,13 @@ def export_to_pdf(data, filename="research_output.pdf"):
         story.append(Spacer(1, 12))
 
         # Books
-        # Books
         story.append(Paragraph("Books to Refer", h2))
         if sections["olib"]:
             books_list = []
             for b in sections["olib"][:5]:
-                # Choose the best available link for the book
                 book_link = b.get("edition_link") or b.get("link", "")
                 book_text = f"<b>{b.get('title')}</b> by {utils.format_author(b.get('author'))} ({b.get('first_publish_year')})"
 
-                # If a link exists, wrap the text in a hyperlink tag
                 if book_link:
                     book_text = f'<link href="{book_link}">{book_text}</link>'
 
@@ -162,7 +155,6 @@ def export_to_pdf(data, filename="research_output.pdf"):
         story.append(Spacer(1, 12))
 
         # News
-        # News
         story.append(Paragraph("Recent News", h2))
         if sections["news"]:
             news_list = []
@@ -176,7 +168,6 @@ def export_to_pdf(data, filename="research_output.pdf"):
                 if desc:
                     text += f" - {desc}"
 
-                # If a URL exists, wrap the text in a hyperlink tag
                 if news_url:
                     text = f'<link href="{news_url}">{text}</link>'
 

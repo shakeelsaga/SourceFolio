@@ -27,9 +27,7 @@ def keyword_separator(keywords):
     return li
 
 
-# New Rich-based fetch_with_progress function
 def fetch_with_progress(message, fetch_func, *args, **kwargs):
-    """Run fetch_func while showing a Rich progress bar."""
     result = None
     with Progress(
         SpinnerColumn(),
@@ -41,22 +39,16 @@ def fetch_with_progress(message, fetch_func, *args, **kwargs):
         task_id = progress.add_task(message, total=None)
         try:
             result = fetch_func(*args, **kwargs)
-            if not result:  # None, empty list, empty dict
-                progress.update(task_id, description=f"[bold red]{message} failed ✘")
+            if not result: 
+                progress.update(task_id, description=f"{message} [bold red]failed ✘[/bold red]")
                 progress.stop()
-                console.print()
                 return result
-            progress.update(
-                task_id, description=f"[bold green]{message} completed successfully ✔"
-            )
+            progress.update(task_id, description=f"{message} [bold green]completed ✔[/bold green]")
             progress.stop()
-            console.print()
         except Exception as e:
-            progress.update(task_id, description=f"[bold red]{message} failed ✘")
+            progress.update(task_id, description=f"{message} [bold red]failed ✘[/bold red]")
             progress.stop()
-            # The underlying function might print specific error, so we add a newline
-            console.print()
-            result = None  # Ensure result is None on exception
+            raise e
     return result
 
 

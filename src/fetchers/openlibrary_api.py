@@ -6,7 +6,6 @@ BASE_URL = "https://openlibrary.org/search.json"
 
 
 def get_books(keyword, limit=5):
-    """Fetch book results for a given keyword from OpenLibrary."""
     url = f"{BASE_URL}?q={keyword}"
     try:
         response = requests.get(url, timeout=10)
