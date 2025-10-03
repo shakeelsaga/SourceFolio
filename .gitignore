@@ -1,20 +1,21 @@
 # ==================================
-# General Python/System Files
+# General Python & System Files
 # ==================================
 
 # Byte-compiled/optimized files
 __pycache__/
 *.pyc
 
-# macOS specific files
-.DS_Store
-
 # Distribution / build directories
 /dist/
 /build/
 
-# Environment variables (recommended)
+# Environment variables
 .env
+
+# IDE and OS-specific files
+.DS_Store
+/.vscode/
 
 # ==================================
 # Project-Specific Exclusions
@@ -23,10 +24,6 @@ __pycache__/
 # Backup/test scripts and old versions
 /src/bts/
 
-# Script for downloading images (and the images folder it creates)
+# Image downloader script and its output
 /src/processing/download_images.py
 /src/processing/images/
-
-/.vscode/
-
-/src/main4.py
