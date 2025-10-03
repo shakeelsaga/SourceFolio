@@ -26,3 +26,7 @@ __pycache__/
 # Script for downloading images (and the images folder it creates)
 /src/processing/download_images.py
 /src/processing/images/
+
+/.vscode/
+
+/src/main4.py

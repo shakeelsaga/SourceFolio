@@ -1,6 +1,17 @@
 import time
 import sys
 import threading
+from rich.progress import (
+    Progress,
+    SpinnerColumn,
+    BarColumn,
+    TextColumn,
+    TimeElapsedColumn,
+)
+from rich.console import Console
+
+console = Console()
+
 
 def keyword_separator(keywords):
     li = []
@@ -15,35 +26,39 @@ def keyword_separator(keywords):
         li.append(word.strip().capitalize())
     return li
 
-def loading_dots(message, stop_event):
-    while not stop_event.is_set():
-        for dots in range(1, 4):
-            if stop_event.is_set():
-                break
-            sys.stdout.write(f"\r{message}{'.' * dots}   ")
-            sys.stdout.flush()
-            time.sleep(0.5)
-    sys.stdout.write("\r" + " " * (len(message) + 5) + "\r")
 
-def status_update(message, success=True):
-    symbol = "✔︎" if success else "✘"
-    print(f"{message} {symbol}")
+# New Rich-based fetch_with_progress function
+def fetch_with_progress(message, fetch_func, *args, **kwargs):
+    """Run fetch_func while showing a Rich progress bar."""
+    result = None
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TimeElapsedColumn(),
+        console=console,
+    ) as progress:
+        task_id = progress.add_task(message, total=None)
+        try:
+            result = fetch_func(*args, **kwargs)
+            if not result:  # None, empty list, empty dict
+                progress.update(task_id, description=f"[bold red]{message} failed ✘")
+                progress.stop()
+                console.print()
+                return result
+            progress.update(
+                task_id, description=f"[bold green]{message} completed successfully ✔"
+            )
+            progress.stop()
+            console.print()
+        except Exception as e:
+            progress.update(task_id, description=f"[bold red]{message} failed ✘")
+            progress.stop()
+            # The underlying function might print specific error, so we add a newline
+            console.print()
+            result = None  # Ensure result is None on exception
+    return result
 
-def fetch_with_animation(message, fetch_func, *args, **kwargs):
-    stop_event = threading.Event()
-    t = threading.Thread(target=loading_dots, args=(message, stop_event))
-    t.start()
-    try:
-        result = fetch_func(*args, **kwargs)
-        stop_event.set()
-        t.join()
-        status_update(message)
-        return result
-    except Exception as e:
-        stop_event.set()
-        t.join()
-        status_update(message, success=False)
-        raise e
 
 def format_author(list):
     author = ""
