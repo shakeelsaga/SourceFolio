@@ -185,4 +185,4 @@ def export_to_pdf(data, filename="research_output.pdf"):
         story.append(PageBreak())
 
     doc.multiBuild(story)
-    console.print(f"[bold green]✅ PDF exported successfully:[/bold green] {filename}")
+    console.print(f"[bold green]PDF exported successfully:[/bold green] {filename}")

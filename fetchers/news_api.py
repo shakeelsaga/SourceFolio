@@ -1,13 +1,19 @@
 import requests
 from datetime import datetime, timedelta
-import os
-from dotenv import load_dotenv
+from processing.config import get_api_key
 
-load_dotenv()
-
-API_KEY = os.getenv("NEWS_API_KEY")
 BASE_URL = "https://newsapi.org/v2/everything"
 
+
+def validate_api_key(api_key):
+    if not api_key:
+        return False
+    url = f"{BASE_URL}?q=test&apiKey={api_key}"
+    try:
+        response = requests.get(url)
+        return response.status_code in [200, 429]
+    except requests.RequestException:
+        return False
 
 def default_date_range(days=7):
     from_date = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
@@ -16,6 +22,10 @@ def default_date_range(days=7):
 
 
 def get_news(keyword, page_size=20, max_pages=1, days=7):
+    API_KEY = get_api_key("NEWS_API_KEY")
+    if not API_KEY:
+        raise Exception("NewsAPI key not found. Please configure it first.")
+
     from_date, to_date = default_date_range(days)
     articles = []
 

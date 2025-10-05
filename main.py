@@ -17,6 +17,8 @@ from processing.ui import (
 )
 from InquirerPy import inquirer
 from datetime import datetime
+from processing.config import get_api_key, save_api_key
+from fetchers.news_api import validate_api_key
 
 try:
     from bs4 import GuessedAtParserWarning
@@ -24,6 +26,51 @@ try:
     warnings.filterwarnings("ignore", category=GuessedAtParserWarning)
 except ImportError:
     pass
+
+
+def check_and_prompt_for_api_key():
+    existing_key = get_api_key("NEWS_API_KEY")
+
+    if existing_key:
+        masked_key = f"...{existing_key[-4:]}"
+        console.print(f"[info]Found existing NewsAPI key: [cyan]{masked_key}[/cyan][/info]")
+        action = inquirer.select(
+            message="What would you like to do?",
+            choices=[
+                {"name": "Use this key", "value": "use"},
+                {"name": "Enter a different key", "value": "change"},
+                {"name": "Remove the key (skip news)", "value": "remove"},
+            ],
+            default="use",
+        ).execute()
+
+        if action == "use":
+            if not validate_api_key(existing_key):
+                console.print("[warn]The existing API key is no longer valid.[/warn]")
+            else:
+                console.print("[success]API key is valid.[/success]\n")
+                return
+        elif action == "remove":
+            save_api_key(None, "NEWS_API_KEY")
+            console.print("[info]API key removed. News fetching will be skipped.[/info]\n")
+            return
+
+    while True:
+        new_key = inquirer.text(
+            message="Please enter your NewsAPI key (or leave blank to skip news fetching):",
+        ).execute()
+
+        if not new_key:
+            console.print("[info]No API key entered. News fetching will be skipped.[/info]\n")
+            save_api_key(None, "NEWS_API_KEY")
+            break
+
+        if validate_api_key(new_key):
+            save_api_key(new_key, "NEWS_API_KEY")
+            console.print("[success]NewsAPI key is valid and has been saved.[/success]\n")
+            break
+        else:
+            console.print("[error]The provided API key is invalid. Please try again.[/error]")
 
 
 def process_keyword(keyword, data):
@@ -161,44 +208,45 @@ def process_keyword(keyword, data):
             break
 
     # --- News API ---
-    while True:
-        news_data = utils.fetch_with_progress(
-            f"Gathering news data for '{current_keyword}'",
-            news.get_news,
-            current_keyword,
-        )
-        if news_data:
-            if current_keyword in data:
-                data[current_keyword]["news"] = news_data
-            break
-
-        console.print(
-            f"\n[warn]Could not find any News article for '{current_keyword}'.[/warn]"
-        )
-        new_kw = (
-            inquirer.text(message="Enter a different keyword (or leave blank to skip):")
-            .execute()
-            .strip()
-        )
-        if new_kw:
-            if current_keyword in data:
-                data[new_kw] = data.pop(current_keyword)
-                console.print(
-                    f"[info]Keyword updated:[/info] '{current_keyword}' → '{new_kw}'\n"
-                )
-            else:
-                data[new_kw] = {
-                    "wiki": {"is_detailed": None, "data": {}},
-                    "news": [],
-                    "olib": [],
-                }
-            current_keyword = new_kw
-            continue
-        else:
-            console.print(
-                "[secondary]Skipping fetching news for this term.[/secondary]\n"
+    if get_api_key("NEWS_API_KEY"):
+        while True:
+            news_data = utils.fetch_with_progress(
+                f"Gathering news data for '{current_keyword}'",
+                news.get_news,
+                current_keyword,
             )
-            break
+            if news_data:
+                if current_keyword in data:
+                    data[current_keyword]["news"] = news_data
+                break
+
+            console.print(
+                f"\n[warn]Could not find any News article for '{current_keyword}'.[/warn]"
+            )
+            new_kw = (
+                inquirer.text(message="Enter a different keyword (or leave blank to skip):")
+                .execute()
+                .strip()
+            )
+            if new_kw:
+                if current_keyword in data:
+                    data[new_kw] = data.pop(current_keyword)
+                    console.print(
+                        f"[info]Keyword updated:[/info] '{current_keyword}' → '{new_kw}'\n"
+                    )
+                else:
+                    data[new_kw] = {
+                        "wiki": {"is_detailed": None, "data": {}},
+                        "news": [],
+                        "olib": [],
+                    }
+                current_keyword = new_kw
+                continue
+            else:
+                console.print(
+                    "[secondary]Skipping fetching news for this term.[/secondary]\n"
+                )
+                break
 
     console.print("\n")
 
@@ -251,6 +299,8 @@ def main():
             console.rule()
 
             console.print("\n[primary]Starting data collection...[/primary]\n")
+
+            check_and_prompt_for_api_key()
 
             for keyword in list(data.keys()):
                 if keyword in data:

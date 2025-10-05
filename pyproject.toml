@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sourcefolio"
+version = "1.0.0"
+authors = [
+  { name="shakeelsaga", email="shakeelmohammedofficial@gmail.com" },
+]
+description = "A CLI tool to automate research by fetching data from multiple sources and exporting to PDF/CSV."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Utilities",
+    "Environment :: Console",
+]
+dependencies = [
+    "rich",
+    "inquirerpy",
+    "typer[all]",
+    "wikipedia",
+    "requests",
+    "python-dotenv",
+    "reportlab",
+    "beautifulsoup4",
+]
+
+[project.urls]
+Homepage = "https://github.com/shakeelsaga/SourceFolio"
+Issues = "https://github.com/shakeelsaga/SourceFolio/issues"
+
+[project.scripts]
+# The correct, simplified entry point
+sourcefolio = "main:main"
