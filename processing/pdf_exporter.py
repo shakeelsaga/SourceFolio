@@ -100,7 +100,7 @@ def export_to_pdf(data, filename="research_output.pdf"):
 
     for i, (key, sections) in enumerate(data.items(), start=1):
         doc.current_keyword = key
-        story.append(Paragraph(f"{i}. {key}", h1))
+        story.append(Paragraph(f"{i}. {sections["wiki"]["data"]["title"]}", h1))
         story.append(Spacer(1, 6))
 
         story.append(
@@ -185,4 +185,4 @@ def export_to_pdf(data, filename="research_output.pdf"):
         story.append(PageBreak())
 
     doc.multiBuild(story)
-    console.print(f"[bold green]PDF exported successfully to {filename}[/bold green]")
+    console.print(f"[green]PDF exported successfully to {filename}[/green]\n")

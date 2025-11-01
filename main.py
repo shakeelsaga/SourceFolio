@@ -14,6 +14,7 @@ from processing.ui import (
     prompt_mode,
     preview_selection,
     console,
+    exit_message,
 )
 from InquirerPy import inquirer
 from datetime import datetime
@@ -261,7 +262,7 @@ def main():
             if not list_of_keys:
                 console.print("\n[warn]⚠️ No keywords entered.[/warn]")
                 if not inquirer.confirm(message="Do you want to try again?", default=True).execute():
-                    console.print("\n[bold cyan]Exiting. Thank you for using SourceFolio![/bold cyan]")
+                    exit_message()
                     sys.exit(0)
                 else:
                     continue
@@ -320,7 +321,7 @@ def main():
                 if inquirer.confirm(message="Do you want to perform another research?", default=True).execute():
                     continue
                 else:
-                    console.print("\n[bold cyan]Thank you for using SourceFolio![/bold cyan]")
+                    exit_message()
                     break
 
             else:
@@ -340,21 +341,18 @@ def main():
 
                 if export_choice == "PDF":
                     pd.export_to_pdf(data, f"research_output_{ts}.pdf")
-                    console.print(f"\n[success]Exported to research_output_{ts}.pdf[/success]")
                 elif export_choice == "CSV":
                     cd.export_to_csv(data, f"research_output_{ts}.csv")
-                    console.print(f"\n[success]Exported to research_output_{ts}.csv[/success]")
                 elif export_choice == "Both":
                     pd.export_to_pdf(data, f"research_output_{ts}.pdf")
                     cd.export_to_csv(data, f"research_output_{ts}.csv")
-                    console.print(f"\n[success]Exported to research_output_{ts}.pdf and research_output_{ts}.csv[/success]")
                 else:
                     console.print("\n[secondary]Export skipped. Thank you for using SourceFolio![/secondary]")
 
             if inquirer.confirm(message="Do you want to perform another research?", default=False).execute():
                 continue
             else:
-                console.print("\n[bold cyan]Thank you for using SourceFolio![/bold cyan]")
+                exit_message()
                 break
 
     except KeyboardInterrupt:

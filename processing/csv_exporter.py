@@ -59,4 +59,4 @@ def export_to_csv(data, filename="research_output.csv"):
                         news.get("publishedAt", ""),
                     ]
                 )
-    console.print(f"[bold green]CSV exported successfully to {filename}[/bold green]")
+    console.print(f"[green]CSV exported successfully to {filename}[/green]\n")

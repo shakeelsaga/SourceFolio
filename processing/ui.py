@@ -32,11 +32,17 @@ app = typer.Typer(help="Research Collector CLI")
 
 
 def splash():
-    console.rule("[primary]SourceFolio", style="primary")
+    console.rule("[primary]SourceFolio[/primary]", style="primary")
+    console.print(Panel(
+        "[bold cyan]Welcome to SourceFolio![/bold cyan]\n\n" + 
+        "This tool helps you gather research from Wikipedia, OpenLibrary, and NewsAPI.\n" +
+        "Created by: [link=https://github.com/shakeelsamsu]shakeelsaga[/link]\n" + 
+        "Homepage: [link=https://github.com/shakeelsamsu/sourcefolio]SourceFolio[/link]",
+        title="[secondary]Interactive Mode[/secondary]",
+        border_style="primary",
+        padding=(1, 1, 1, 1)
+    ))
     console.print()
-    console.print(
-        "[secondary]A fast research assistant for Wikipedia, Books, and News[/secondary]\n"
-    )
 
 
 def prompt_keywords(existing: List[str] | None = None) -> List[str]:
@@ -67,6 +73,9 @@ def prompt_mode() -> int:
     ).execute()
     return int(choice)
 
+
+def exit_message():
+    console.print("\n[bold cyan]Exiting. Thank you for using SourceFolio![/bold cyan]")
 
 def preview_selection(data_model: Dict[str, Dict[str, Any]]):
     table = Table("Keyword", "Wikipedia Title", "Books/News", show_lines=False)
