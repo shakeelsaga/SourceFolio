@@ -1,13 +1,18 @@
+# This script is all about exporting the research data into a CSV file.
+# It takes the collected data and organizes it into a structured CSV format.
+
 import csv
 import processing.utils as util
 from rich.console import Console
 
 console = Console()
 
-
+# This is the main function that takes the data and exports it to a CSV file.
 def export_to_csv(data, filename="research_output.csv"):
+    # I'm opening the CSV file in write mode.
     with open(filename, mode="w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
+        # I'm writing the header row of the CSV file.
         writer.writerow(
             [
                 "Keyword",
@@ -19,8 +24,9 @@ def export_to_csv(data, filename="research_output.csv"):
                 "Published At",
             ]
         )
+        # I'm looping through the data for each keyword.
         for keyword, content in data.items():
-            # Wikipedia
+            # First, I'm writing the Wikipedia data.
             if "wiki" in content:
                 writer.writerow(
                     [
@@ -33,7 +39,7 @@ def export_to_csv(data, filename="research_output.csv"):
                         "",
                     ]
                 )
-            # Books
+            # Next, I'm writing the book data from OpenLibrary.
             for olib in content.get("olib", []):
                 writer.writerow(
                     [
@@ -46,7 +52,7 @@ def export_to_csv(data, filename="research_output.csv"):
                         olib.get("first_publish_year", ""),
                     ]
                 )
-            # News
+            # Finally, I'm writing the news data.
             for news in content.get("news", []):
                 writer.writerow(
                     [
@@ -59,4 +65,5 @@ def export_to_csv(data, filename="research_output.csv"):
                         news.get("publishedAt", ""),
                     ]
                 )
+    # I'm printing a success message to the console.
     console.print(f"[green]CSV exported successfully to {filename}[/green]\n")

@@ -1,3 +1,6 @@
+# This script handles the user interface of the application.
+# It uses the rich and InquirerPy libraries to create a beautiful and interactive command-line interface.
+
 from typing import List, Dict, Any
 from rich.console import Console
 from rich.panel import Panel
@@ -14,6 +17,7 @@ from rich.traceback import install as rich_tracebacks
 from InquirerPy import inquirer
 import typer
 
+# I'm creating a console object with a custom theme for styling the output.
 console = Console(
     theme=Theme(
         {
@@ -26,16 +30,19 @@ console = Console(
     )
 )
 
+# I'm installing rich tracebacks for beautiful and readable error messages.
 rich_tracebacks(show_locals=False)
 
-app = typer.Typer(help="Research Collector CLI")
+# I'm creating a typer application.
+app = typer.Typer(help="A CLI tool for collecting research data")
 
+# This function displays the splash screen of the application.
 
 def splash():
     console.rule("[primary]SourceFolio[/primary]", style="primary")
     console.print(Panel(
         "[bold cyan]Welcome to SourceFolio![/bold cyan]\n\n" +
-        "This tool helps you gather research from Wikipedia, OpenLibrary, and NewsAPI.\n\n" +
+        "This tool helps gather research from Wikipedia, OpenLibrary, and NewsAPI.\n\n" +
         "Please read the [bold]README.md[/bold] file before using the tool. It contains important information and instructions.\n" +
         "If you get stuck at any point, please refer to the [bold]README.md[/bold] file.\n\n" +
         "Created by: [link=https://github.com/shakeelsamsu]shakeelsaga[/link]\n" +
@@ -46,7 +53,8 @@ def splash():
     ))
     console.print()
 
-
+# This function prompts the user to enter keywords.
+# It supports both comma-separated keywords and multi-line input.
 def prompt_keywords(existing: List[str] | None = None) -> List[str]:
     kw_str = inquirer.text(
         message="Enter keywords (comma separated). Press Enter for multi-line:",
@@ -62,7 +70,8 @@ def prompt_keywords(existing: List[str] | None = None) -> List[str]:
     kws = [k.strip() for k in kw_str.replace("\n", ",").split(",") if k.strip()]
     return kws
 
-
+# This function prompts the user to select the Wikipedia data mode.
+# The user can choose between summary, full details, or manual selection for each keyword.
 def prompt_mode() -> int:
     choice = inquirer.select(
         message="Select Wikipedia data mode:",
@@ -75,10 +84,11 @@ def prompt_mode() -> int:
     ).execute()
     return int(choice)
 
-
+# This function displays a simple exit message.
 def exit_message():
     console.print("\n[bold cyan]Exiting. Thank you for using SourceFolio![/bold cyan]")
 
+# This function displays a preview of the collected data in a table.
 def preview_selection(data_model: Dict[str, Dict[str, Any]]):
     table = Table("Keyword", "Wikipedia Title", "Books/News", show_lines=False)
     for key, sections in data_model.items():
@@ -87,6 +97,7 @@ def preview_selection(data_model: Dict[str, Dict[str, Any]]):
         table.add_row(key, title, bn)
     console.print(Panel(table, title="[primary]Preview[/primary]", border_style="primary"))
 
+# This is the main command for the typer application.
 @app.command()
 def run():
     splash()
