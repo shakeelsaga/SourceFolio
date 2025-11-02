@@ -42,14 +42,13 @@ def splash():
     console.rule("[primary]SourceFolio[/primary]", style="primary")
     console.print(Panel(
         "[bold cyan]Welcome to SourceFolio![/bold cyan]\n\n" +
-        "This tool helps gather research from Wikipedia, OpenLibrary, and NewsAPI.\n\n" +
-        "Please read the [bold]README.md[/bold] file before using the tool. It contains important information and instructions.\n" +
-        "If you get stuck at any point, please refer to the [bold]README.md[/bold] file.\n\n" +
-        "Created by: [link=https://github.com/shakeelsamsu]shakeelsaga[/link]\n" +
-        "Homepage: [link=https://github.com/shakeelsamsu/sourcefolio]SourceFolio[/link]",
+        "A tool to help gather research from Wikipedia, OpenLibrary, and NewsAPI.\n\n" +
+        "For full documentation and instructions, please visit the GitHub repository:\n" +
+        "[bold][link=https://github.com/shakeelsaga/SourceFolio]https://github.com/shakeelsaga/SourceFolio[/link][/bold]\n\n" +
+        "Created by: [bold][link=https://github.com/shakeelsaga]shakeelsaga (https://github.com/shakeelsaga)[/link][/bold]",
         title="[secondary]Interactive Mode[/secondary]",
         border_style="primary",
-        padding=(1, 1, 1, 1)
+        padding=(1, 1)
     ))
     console.print()
 

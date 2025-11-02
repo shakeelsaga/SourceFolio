@@ -19,13 +19,4 @@ __pycache__/
 
 /sourcefolio.egg-info/
 
-# ==================================
-# Project-Specific Exclusions
-# ==================================
 
-# Backup/test scripts and old versions
-/bts/
-
-# Image downloader script and its output
-/processing/download_images.py
-/processing/images/
