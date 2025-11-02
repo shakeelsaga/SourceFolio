@@ -52,12 +52,22 @@ sourcefolio
 
 Follow the on-screen prompts to enter keywords, choose the level of detail, and export your research report.
 
+**Tip:** You can exit the application at any point by pressing `Ctrl+C`.
+
 ##  Project Structure
 
 ```
 .
-├── fetchers/                # data fetching fucntions
-├── processing/              # supporting functions
+├── fetchers/                # Data fetching functions
+│   ├── news_api.py
+│   ├── openlibrary_api.py
+│   └── wikipedia_function.py
+├── processing/              # Supporting functions
+│   ├── config.py
+│   ├── csv_exporter.py
+│   ├── pdf_exporter.py
+│   ├── ui.py
+│   └── utils.py
 ├── tests/                   # Test files
 ├── main.py                  # Main function
 ├── pyproject.toml           # Project metadata and dependencies
@@ -74,12 +84,11 @@ Follow the on-screen prompts to enter keywords, choose the level of detail, and 
 
 ##  Project Roadmap
 
- This is the first working version. Planned enhancements include:
- - Improved CLI interface with Rich/InquirerPy. 
- - Real-time progress bars during data fetching. 
- - More polished PDF exports (with TOC, watermark, styling). 
- - Additional export formats (CSV). 
- - Packaging for distribution (pip install sourcefolio).
+This is the first public version of SourceFolio. I am planning on continuing to include more features in the future. Some of the planned enhancements include:
+
+- **More Data Sources:** Integration with additional data sources such as academic journals and social media.
+- **Selective Data Output:** Users will be able to choose which data sources to include in the final output.
+- **Command-Line Flags:** The ability to use the tool directly from the command line with flags, bypassing the interactive mode.
 
 
 ##  Acknowledgements
