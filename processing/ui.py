@@ -33,11 +33,18 @@ app = typer.Typer(help="Research Collector CLI")
 
 def splash():
     console.rule("[primary]SourceFolio[/primary]", style="primary")
+
+    creator_url = "https://github.com/shakeelsaga"
+    homepage_url = "https://github.com/shakeelsaga/sourcefolio"
+
+    creator = f"[link={creator_url}]shakeelsaga[/link] ({creator_url})"
+    homepage = f"[link={homepage_url}]SourceFolio[/link] ({homepage_url})"
+
     console.print(Panel(
-        "[bold cyan]Welcome to SourceFolio![/bold cyan]\n\n" + 
-        "This tool helps you gather research from Wikipedia, OpenLibrary, and NewsAPI.\n" +
-        "Created by: [link=https://github.com/shakeelsamsu]shakeelsaga[/link]\n" + 
-        "Homepage: [link=https://github.com/shakeelsamsu/sourcefolio]SourceFolio[/link]",
+        "[bold cyan]Welcome to SourceFolio![/bold cyan]\n\n"
+        "This tool helps you gather research from Wikipedia, OpenLibrary, and NewsAPI.\n\n"
+        f"[secondary]Created by:[/secondary] {creator}\n"
+        f"[secondary]Homepage:[/secondary] {homepage}",
         title="[secondary]Interactive Mode[/secondary]",
         border_style="primary",
         padding=(1, 1, 1, 1)
