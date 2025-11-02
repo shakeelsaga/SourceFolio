@@ -120,7 +120,9 @@ def export_to_pdf(data, filename="research_output.pdf"):
     for i, (key, sections) in enumerate(data.items(), start=1):
         doc.current_keyword = key
         # This is the main title for each section.
-        story.append(Paragraph(f"{i}. {sections["wiki"]["data"]["title"]}", h1))
+        # Use the wiki title if it exists, otherwise fall back to the keyword
+        title = sections["wiki"]["data"].get("title", key)
+        story.append(Paragraph(f"{i}. {title}", h1))
         story.append(Spacer(1, 6))
 
         # This is the subtitle for the Wikipedia section.

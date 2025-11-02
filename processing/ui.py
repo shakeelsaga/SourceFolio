@@ -93,8 +93,13 @@ def preview_selection(data_model: Dict[str, Dict[str, Any]]):
     table = Table("Keyword", "Wikipedia Title", "Books/News", show_lines=False)
     for key, sections in data_model.items():
         title = sections["wiki"]["data"].get("title") or "—"
+        url = sections["wiki"]["data"].get("url")
+
+        # Create a clickable link if a URL exists
+        title_display = f"[link={url}]{title}[/link]" if url and title != "—" else title
+
         bn = f"{len(sections.get('olib', []))} books, {len(sections.get('news', []))} articles"
-        table.add_row(key, title, bn)
+        table.add_row(key, title_display, bn)
     console.print(Panel(table, title="[primary]Preview[/primary]", border_style="primary"))
 
 # This is the main command for the typer application.
