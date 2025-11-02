@@ -1,8 +1,8 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
-    packages=find_packages(exclude=["tests*"]),
-    py_modules=["main"],
+    packages=["fetchers", "processing"],  
+    py_modules=["main"],                  
     entry_points={
         'console_scripts': [
             'sourcefolio = main:main',
