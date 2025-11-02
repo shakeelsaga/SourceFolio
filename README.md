@@ -91,6 +91,17 @@ This is the first public version of SourceFolio. I am planning on continuing to 
 - **Command-Line Flags:** The ability to use the tool directly from the command line with flags, bypassing the interactive mode.
 
 
+##  Contributing
+
+SourceFolio is an open-source project, and contributions are always welcome! Whether you're interested in fixing bugs, adding new features, or improving documentation, your help is appreciated.
+
+If you'd like to contribute, please feel free to:
+
+-   Fork the repository and submit a pull request.
+-   Open an issue to report bugs or suggest improvements.
+
+Every contribution, no matter how small, helps make this project better.
+
 ##  Acknowledgements
 
 - [Wikipedia](https://www.wikipedia.org/)
