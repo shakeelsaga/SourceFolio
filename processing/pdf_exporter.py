@@ -51,7 +51,7 @@ class ReportDocTemplate(BaseDocTemplate):
     # This method adds a footer to each page.
     def _add_footer(self, canvas, doc):
         canvas.saveState()
-        footer_text = "Powered by sourcefolio"
+        footer_text = "Powered by SourceFolio"
         canvas.setFont("Helvetica", 8)
         canvas.drawRightString(self.pagesize[0] - cm, cm / 2, footer_text)
         canvas.restoreState()
