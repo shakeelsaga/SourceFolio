@@ -3,6 +3,7 @@
 
 from typing import List, Dict, Any
 from rich.console import Console
+from typing import List, Dict, Any, Optional
 from rich.panel import Panel
 from rich.table import Table
 from rich.progress import (
@@ -54,7 +55,7 @@ def splash():
 
 # This function prompts the user to enter keywords.
 # It supports both comma-separated keywords and multi-line input.
-def prompt_keywords(existing: List[str] | None = None) -> List[str]:
+def prompt_keywords(existing: Optional[List[str]] = None) -> List[str]:
     kw_str = inquirer.text(
         message="Enter keywords (comma separated). Press Enter for multi-line:",
         default=", ".join(existing or []),
