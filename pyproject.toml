@@ -4,7 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sourcefolio"
-version = "1.0.2"
+# You must bump the version to upload a fix
+version = "1.0.3"
 authors = [
   { name="shakeelsaga", email="shakeelmohammedofficial@gmail.com" },
 ]
@@ -34,5 +35,8 @@ Homepage = "https://github.com/shakeelsaga/SourceFolio"
 Issues = "https://github.com/shakeelsaga/SourceFolio/issues"
 
 [project.scripts]
-# The correct, simplified entry point
 sourcefolio = "main:main"
+
+[tool.setuptools]
+py-modules = ["main"]
+packages = ["fetchers", "processing"]
