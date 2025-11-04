@@ -63,7 +63,7 @@ def prompt_keywords(existing: Optional[List[str]] = None) -> List[str]:
     if not kw_str.strip():
         kw_str = (
             inquirer.text(
-                message="Enter keywords (one per line, press Ctrl+D when done):",
+                message="Enter keywords (one per line, press 'Enter' to go to the next line):",
                 multiline=True,
             ).execute() or ""
         )
