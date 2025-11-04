@@ -15,6 +15,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - (Empty for now)
 
+## [1.0.6] - 2025-11-04
+
+### Added
+- Added a professional banner to the `README.md` file.
+- Added the project's official logo to the PyPI page
 
 ## [1.0.5] - 2025-11-04
 

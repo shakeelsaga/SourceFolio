@@ -1,3 +1,10 @@
+<p align="center">
+  <a href="https://github.com/shakeelsaga/SourceFolio">
+    <img src="https://cdn.jsdelivr.net/gh/shakeelsaga/SourceFolio@main/.assets/SourceFolio-Banner.png" alt="SourceFolio Banner">
+  </a>
+</p>
+
+
 # SourceFolio
 
 [![PyPI Version](https://img.shields.io/pypi/v/sourcefolio.svg)](https://pypi.org/project/sourcefolio/)

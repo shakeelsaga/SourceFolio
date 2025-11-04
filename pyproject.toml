@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sourcefolio"
 # You must bump the version to upload a fix
-version = "1.0.5"
+version = "1.0.6"
 authors = [
   { name="shakeelsaga", email="shakeelmohammedofficial@gmail.com" },
 ]
@@ -33,6 +33,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/shakeelsaga/SourceFolio"
 Issues = "https://github.com/shakeelsaga/SourceFolio/issues"
+icon = "https://cdn.jsdelivr.net/gh/shakeelsaga/SourceFolio@main/.assets/SourceFolio-Logo.png"
 
 [project.scripts]
 sourcefolio = "main:main"
