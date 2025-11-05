@@ -15,6 +15,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - (Empty for now)
 
+## [1.0.7] - 2025-11-05
+
+### Added
+- Added a comprehensive troubleshooting guide to `README.md` for all Windows `PATH` errors (e.g., `pip`, `python`, and `sourcefolio` not recognized).
+- Added a troubleshooting guide to the `README.md` for the Linux `PATH` issue (`sourcefolio: command not found`).
+
+
 ## [1.0.6] - 2025-11-04
 
 ### Added

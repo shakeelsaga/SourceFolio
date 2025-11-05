@@ -67,20 +67,72 @@ Follow the on-screen prompts to enter keywords, choose the level of detail, and 
 
 ## ⚙️ Troubleshooting
 
-### Windows: `'sourcefolio' is not recognized as an internal or external command...`
+### ISSUE: Windows: `python`, `py`, `pip`, or `sourcefolio` is not recognized...
 
-This error typically happens on Windows if your Python installer was not configured to "Add Python to PATH". This means the system doesn't know where to find the `sourcefolio` command.
+This is a very common issue on Windows, and all these errors point to the **same single problem**: your Python installation is not added to your system's `PATH`.
 
-Newer Python installers or distributions like Anaconda often handle this automatically, but the fix is simple:
+The fix is to manually find your Python installation and `Scripts` folders and add them to your Windows Environment Variables. This guide will fix all of those errors at once.
+
+#### **Solution (The Manual Fix)**
+
+**Step 1. Find Your Python Paths**
+
+Since the `python` command doesn't work, we must find the path manually.
+
+1.  Press the **Windows Key** to open the Start Menu.
+2.  Type **`python`**.
+3.  Right-click on the "Python" app (e.g., "Python 3.11") in the search results and select **"Open file location"**.
+4.  This may open a folder with a *shortcut*. If it is a shortcut, right-click the shortcut and select **"Open file location"** *again*.
+5.  You should now be in the main Python installation folder (you'll see `python.exe`). Click in the address bar at the top of the File Explorer to copy this path.
+
+You now have the **two paths** you need:
+* **Path 1 (Main Folder):** The path you just copied (e.g., `C:\Users\YourUsername\AppData\Local\Programs\Python\Python311`)
+* **Path 2 (Scripts Folder):** The exact same path, but with `\Scripts` added to the end (e.g., `C:\Users\YourUsername\AppData\Local\Programs\Python\Python311\Scripts`)
+
+**Step 2. Add Both Paths to Environment Variables**
 
 1.  Press the **Windows Key**, type **`env`**, and select **"Edit the system environment variables"**.
-2.  Click the **"Environment Variables..."** button.
-3.  In the top "User variables" box, select the **`Path`** variable and click **"Edit..."**.
-4.  Click **"New"** and paste in the path to your Python `Scripts` folder.
-      * *You can find this path by running `py -m site --user-site` in your command prompt and replacing `site-packages` with `Scripts`.*
-      * *It will look something like this: `C:\Users\YourUsername\AppData\Roaming\Python\PythonXX\Scripts`*
-5.  Click "OK" on all windows to save.
-6.  **Completely close and re-open your terminal.** The `sourcefolio` command will now work.
+2.  In the window that opens, click the **"Environment Variables..."** button.
+3.  In the **top box** ("User variables..."), find the variable named **`Path`**. Click on it, then click **"Edit..."**.
+4.  Click the **"New"** button and paste in **Path 1** (the main folder).
+5.  Click **"New"** again and paste in **Path 2** (the `Scripts` folder).
+6.  Click "OK" on all three windows to save and close everything.
+
+**Step 3. Restart Your Terminal**
+
+* This is the most important step. **Completely close and re-open** your PowerShell or CMD window.
+* To confirm it worked, type `pip --version`. You should see the version number.
+* You can now successfully run `pip install sourcefolio`.
+
+---
+**Still confused?**
+[Here is a short YouTube video](https://www.youtube.com/watch?v=dj5oOPaeIqI) that walks you through this exact process.
+
+### ISSUE: Linux (Ubuntu/Debian): `sourcefolio: command not found`
+
+This is a common issue on many Linux distributions. When you install a package with `pip` as a user, it places the command in `~/.local/bin`. This folder is often not in your shell's `PATH` by default.
+
+#### **Solution (The One-Liner Fix)**
+
+You only need to run these two commands in your terminal.
+
+**Step 1. Add the Path to Your Shell Configuration**
+
+This command adds the user-level `bin` folder to your `PATH` permanently.
+
+```bash
+echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.bashrc
+```
+(Note: If you are using Zsh (like on modern macOS or some custom Linux setups) instead of Bash, you would use `~/.zshrc` instead of `~/.bashrc`)
+
+#### Step 2. Refresh Your Terminal ####
+
+This command applies the change immediately to your current session.
+
+```bash
+source ~/.bashrc
+```
+After this, the `sourcefolio` command will work.
 
 ## 📂 Project Structure
 
