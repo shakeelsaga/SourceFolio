@@ -27,19 +27,19 @@ from fetchers.news_api import validate_api_key
 # I'm ignoring a specific warning from BeautifulSoup that is not relevant to the user.
 try:
     from bs4 import GuessedAtParserWarning
-
     warnings.filterwarnings("ignore", category=GuessedAtParserWarning)
 except ImportError:
     pass
 
 # This function checks for a NewsAPI key and prompts the user to enter one if it's not found.
-# It also allows the user to use an existing key, change it, or remove it.
+# It includes robust retry loops so the user isn't stuck if their internet connection drops.
 def check_and_prompt_for_api_key():
     existing_key = get_api_key("NEWS_API_KEY")
 
     if existing_key:
         masked_key = f"...{existing_key[-4:]}"
         console.print(f"[info]Found existing NewsAPI key: [cyan]{masked_key}[/cyan][/info]")
+        
         action = inquirer.select(
             message="What would you like to do?",
             choices=[
@@ -51,17 +51,39 @@ def check_and_prompt_for_api_key():
         ).execute()
 
         if action == "use":
-            if not validate_api_key(existing_key):
-                console.print("[warn]The existing API key is no longer valid.[/warn]")
-            else:
-                console.print("[success]API key is valid.[/success]\n")
-                return
+            # I'm starting a loop here to let the user retry validation if the network fails.
+            while True:
+                try:
+                    if not validate_api_key(existing_key):
+                        console.print("[warn]The existing API key is no longer valid.[/warn]")
+                        # I'm breaking the loop to let the user enter a new key below.
+                        break 
+                    else:
+                        console.print("[success]API key is valid.[/success]\n")
+                        return
+                except Exception as e:
+                    # I'm handling network errors gracefully by giving the user options.
+                    console.print(f"\n[warn]⚠️  Connection lost.[/warn]")
+                    
+                    choice = inquirer.select(
+                        message="Connection lost. What would you like to do?",
+                        choices=["Retry Connection", "Exit Application"],
+                        default="Retry Connection",
+                    ).execute()
+                    
+                    if choice == "Retry Connection":
+                        console.print("[cyan]Retrying...[/cyan]")
+                        continue
+                    else:
+                        exit_message()
+                        sys.exit(0)
+
         elif action == "remove":
             save_api_key(None, "NEWS_API_KEY")
             console.print("[info]API key removed. News fetching will be skipped.[/info]\n")
             return
 
-    # If there's no existing key or the user wants to change it, I'm prompting for a new key.
+    # If there's no existing key or the user wants to change it, I'm prompting for a new one.
     while True:
         new_key = inquirer.text(
             message="Please enter your NewsAPI key (or leave blank to skip news fetching):",
@@ -72,33 +94,40 @@ def check_and_prompt_for_api_key():
             save_api_key(None, "NEWS_API_KEY")
             break
 
-        try:
-            if validate_api_key(new_key):
-                save_api_key(new_key, "NEWS_API_KEY")
-                console.print("[success]NewsAPI key is valid and has been saved.[/success]\n")
-                break
-            else:
-                # This only runs if the server explicitly replied "401 Unauthorized"
-                console.print("[error]The provided API key is invalid. Please check it and try again.[/error]")
+        # I'm creating a nested loop to handle validation retries for the new key.
+        validation_success = False
+        while True:
+            try:
+                if validate_api_key(new_key):
+                    save_api_key(new_key, "NEWS_API_KEY")
+                    console.print("[success]NewsAPI key is valid and has been saved.[/success]\n")
+                    validation_success = True
+                    break # Breaking the inner loop since validation passed.
+                else:
+                    console.print("[error]The provided API key is invalid. Please check it and try again.[/error]")
+                    break # Breaking the inner loop to let the user re-type the key.
+            except Exception as e:
+                console.print(f"\n[warn]⚠️  Connection lost.[/warn]")
+                
+                # I'm offering specific choices for this context.
+                choice = inquirer.select(
+                    message="Connection lost. What would you like to do?",
+                    choices=["Retry Connection", "Exit Application"],
+                    default="Retry Connection",
+                ).execute()
+                
+                if choice == "Retry Connection":
+                    console.print("[cyan]Retrying...[/cyan]")
+                    continue
+                else:
+                    exit_message()
+                    sys.exit(0)
 
-        except Exception as e:
-            # This runs if the internet is down
-            console.print(f"\n[warn]⚠️  Could not validate key due to network error.[/warn]")
-            console.print(f"[secondary]Error details: {e}[/secondary]")
-            
-            # Smart UX: Ask the user what to do
-            should_save = inquirer.confirm(
-                message="Do you want to save this key anyway?",
-                default=True
-            ).execute()
-            
-            if should_save:
-                save_api_key(new_key, "NEWS_API_KEY")
-                console.print("[info]Key saved (unverified).[/info]\n")
-                break
+        if validation_success:
+            break
 
 # This function processes a single keyword. It fetches data from Wikipedia, OpenLibrary, and NewsAPI.
-# It also handles cases where a keyword is ambiguous or no data is found.
+# It relies on the robust 'fetch_with_progress' utility to handle network interruptions.
 def process_keyword(keyword, data):
     current_keyword = keyword
 
@@ -116,6 +145,7 @@ def process_keyword(keyword, data):
                 data[current_keyword]["wiki"]["data"] = wiki_data
                 break
 
+            # If we get here, it means no data was found (but no crash occurred).
             console.print(
                 f"\n[warn]No definitive Wikipedia page found for '{current_keyword}'.[/warn]"
             )
@@ -195,7 +225,7 @@ def process_keyword(keyword, data):
                 break
 
     # --- OpenLibrary ---
-    # I'm fetching book data from OpenLibrary.
+    # I'm fetching book data from OpenLibrary using the same robust fetcher.
     while True:
         books = utils.fetch_with_progress(
             f"Gathering book data for '{current_keyword}'",
@@ -236,7 +266,7 @@ def process_keyword(keyword, data):
             break
 
     # --- News API ---
-    # I'm fetching news data from NewsAPI, but only if an API key is available.
+    # I'm fetching news data, but only if we successfully configured an API key.
     if get_api_key("NEWS_API_KEY"):
         while True:
             news_data = utils.fetch_with_progress(

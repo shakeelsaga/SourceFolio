@@ -15,10 +15,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - (Empty for now)
 
-## [1.0.8] - 2025-12-12
+## [1.0.9] - 2025-12-12
+
+### Changed
+- **UX Improvement:** Connection failure messages are now cleaner and user-friendly, replacing raw error tracebacks with clear status notifications.
 
 ### Fixed
-- **Critical (Stability):** Fixed a fatal crash in `utils.py` where network errors were being re-raised instead of handled gracefully. The application now correctly reports "failed" on the progress bar and continues running if the internet connection drops.
+- **Stability:** Implemented robust retry and exit mechanisms for all network operations (Wikipedia, OpenLibrary, NewsAPI). If the internet connection is lost, the application now pauses and allows the user to retry the connection instead of crashing.
+
+## [1.0.8] - 2025-11-05
+
+### Fixed
+- **Critical (Stability):** Fixed a fatal crash where network errors were being re-raised instead of handled gracefully. The application now reports "failed" on the progress bar and continues running.
 - **Improved:** `NewsAPI` validation now distinguishes between "Invalid Key" and "Network Error," preventing false negatives when the user is offline.
 
 ## [1.0.7] - 2025-11-05
@@ -27,12 +35,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added a comprehensive troubleshooting guide to `README.md` for all Windows `PATH` errors (e.g., `pip`, `python`, and `sourcefolio` not recognized).
 - Added a troubleshooting guide to the `README.md` for the Linux `PATH` issue (`sourcefolio: command not found`).
 
-
 ## [1.0.6] - 2025-11-04
 
 ### Added
 - Added a professional banner to the `README.md` file.
-- Added the project's official logo to the PyPI page
+- Added the project's official logo to the PyPI page.
 
 ## [1.0.5] - 2025-11-04
 
