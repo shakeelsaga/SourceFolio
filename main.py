@@ -72,12 +72,30 @@ def check_and_prompt_for_api_key():
             save_api_key(None, "NEWS_API_KEY")
             break
 
-        if validate_api_key(new_key):
-            save_api_key(new_key, "NEWS_API_KEY")
-            console.print("[success]NewsAPI key is valid and has been saved.[/success]\n")
-            break
-        else:
-            console.print("[error]The provided API key is invalid. Please try again.[/error]")
+        try:
+            if validate_api_key(new_key):
+                save_api_key(new_key, "NEWS_API_KEY")
+                console.print("[success]NewsAPI key is valid and has been saved.[/success]\n")
+                break
+            else:
+                # This only runs if the server explicitly replied "401 Unauthorized"
+                console.print("[error]The provided API key is invalid. Please check it and try again.[/error]")
+
+        except Exception as e:
+            # This runs if the internet is down
+            console.print(f"\n[warn]⚠️  Could not validate key due to network error.[/warn]")
+            console.print(f"[secondary]Error details: {e}[/secondary]")
+            
+            # Smart UX: Ask the user what to do
+            should_save = inquirer.confirm(
+                message="Do you want to save this key anyway?",
+                default=True
+            ).execute()
+            
+            if should_save:
+                save_api_key(new_key, "NEWS_API_KEY")
+                console.print("[info]Key saved (unverified).[/info]\n")
+                break
 
 # This function processes a single keyword. It fetches data from Wikipedia, OpenLibrary, and NewsAPI.
 # It also handles cases where a keyword is ambiguous or no data is found.

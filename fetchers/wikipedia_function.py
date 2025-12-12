@@ -2,6 +2,7 @@
 # It provides functions to clean the search keyword and fetch data from Wikipedia.
 
 import re
+import requests
 import wikipedia
 
 # This function cleans the keyword by removing special characters.
@@ -31,6 +32,9 @@ def get_wiki_data(term, is_detailed=False):
                 "content": summary,
                 "url": page.url
             }
+    # Explicitly catch network issues so the UI knows it's a connection failure
+    except requests.exceptions.RequestException as e:
+        raise Exception(f"Wikipedia connection failed: {e}")
 
     # I'm handling potential errors from the Wikipedia library.
     except wikipedia.exceptions.PageError:

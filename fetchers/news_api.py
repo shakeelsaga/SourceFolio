@@ -15,11 +15,18 @@ def validate_api_key(api_key):
         return False
     url = f"{BASE_URL}?q=test&apiKey={api_key}"
     try:
-        response = requests.get(url)
-        # A status code of 200 (OK) or 429 (Too Many Requests) means the key is likely valid.
+        response = requests.get(url, timeout=5)
+        
+        # This checks for any invalid keys
+        if response.status_code == 401:
+            return False
+            
+        # Keys are valid
         return response.status_code in [200, 429]
-    except requests.RequestException:
-        return False
+        
+    except requests.exceptions.RequestException as e:
+        # This tells main.py that there is a connection error
+        raise Exception(f"Connection failed: {e}")
 
 # This function returns a default date range for the news search.
 # It defaults to the last 7 days.
@@ -47,19 +54,22 @@ def get_news(keyword, page_size=20, max_pages=1, days=7):
             f"&sortBy=publishedAt&pageSize={page_size}&page={page}"
             f"&language=en&apiKey={API_KEY}"
         )
-        response = requests.get(url)
+        try:
+            # Always add a timeout! (10 seconds)
+            response = requests.get(url, timeout=10)
+            
+            if response.status_code == 429:
+                raise Exception("Rate limit exceeded. Try again later.")
+            if response.status_code != 200:
+                raise Exception(f"NewsAPI request failed: {response.status_code}")
+                
+            data = response.json()
+            if data.get("status") != "ok":
+                raise Exception(f"NewsAPI error: {data.get('message', 'Unknown error')}")
 
-        # I'm handling potential errors from the API.
-        if response.status_code == 429:
-            raise Exception("Rate limit exceeded. Try again later.")
-        if response.status_code != 200:
-            raise Exception(
-                f"NewsAPI request failed: {response.status_code} {response.text}"
-            )
-
-        data = response.json()
-        if data.get("status") != "ok":
-            raise Exception(f"NewsAPI error: {data}")
+        except requests.exceptions.RequestException as e:
+            # This catches ConnectionError, Timeout, etc.
+            raise Exception(f"Network error: {e}")
 
         # I'm extracting the relevant information from each article and adding it to the list.
         for article in data.get("articles", []):

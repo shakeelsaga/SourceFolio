@@ -25,7 +25,7 @@ SourceFolio is a CLI tool that automates research by fetching information from m
 - **Multiple Export Formats**: Exports comprehensive reports to **PDF** (with clickable links) and **CSV**.
 - **Rich Terminal UI**: Uses modern, interactive prompts and progress bars for a better user experience.
 
-## 📦 Installation
+## Installation
 
 SourceFolio is available on the Python Package Index (PyPI). You can install it directly using `pip`:
 
@@ -39,7 +39,7 @@ To upgrade to the latest version, run:
 pip install --upgrade sourcefolio
 ```
 
-## 🛠️ Configuration
+## Configuration
 
 SourceFolio requires a free API key from [newsapi.org](https://newsapi.org) to fetch news articles.
 
@@ -65,7 +65,7 @@ Follow the on-screen prompts to enter keywords, choose the level of detail, and 
 
 **Tip:** You can exit the application at any point by pressing `Ctrl+C`.
 
-## ⚙️ Troubleshooting
+## Troubleshooting
 
 ### ISSUE: Windows: `python`, `py`, `pip`, or `sourcefolio` is not recognized...
 
@@ -134,7 +134,7 @@ source ~/.bashrc
 ```
 After this, the `sourcefolio` command will work.
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 SourceFolio/

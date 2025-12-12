@@ -15,6 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - (Empty for now)
 
+## [1.0.8] - 2025-12-12
+
+### Fixed
+- **Critical (Stability):** Fixed a fatal crash in `utils.py` where network errors were being re-raised instead of handled gracefully. The application now correctly reports "failed" on the progress bar and continues running if the internet connection drops.
+- **Improved:** `NewsAPI` validation now distinguishes between "Invalid Key" and "Network Error," preventing false negatives when the user is offline.
+
 ## [1.0.7] - 2025-11-05
 
 ### Added

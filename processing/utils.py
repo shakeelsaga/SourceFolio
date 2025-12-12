@@ -45,19 +45,27 @@ def fetch_with_progress(message, fetch_func, *args, **kwargs):
         try:
             # I'm executing the provided function.
             result = fetch_func(*args, **kwargs)
-            # If the function fails, I'm updating the progress bar to show a failure message.
+            
+            # If the function returns None/Empty, mark as failed (soft fail)
             if not result: 
                 progress.update(task_id, description=f"{message} [bold red]failed ✘[/bold red]")
                 progress.stop()
-                return result
+                return None
+            
             # If the function succeeds, I'm updating the progress bar to show a success message.
             progress.update(task_id, description=f"{message} [bold green]completed ✔[/bold green]")
             progress.stop()
+            
         except Exception as e:
-            # If there's an exception, I'm updating the progress bar to show a failure message and re-raising the exception.
+            # Update the progress bar to show failure visually
             progress.update(task_id, description=f"{message} [bold red]failed ✘[/bold red]")
             progress.stop()
-            raise e
+            
+            # Prints the error message so the user knows WHY the error occured
+            console.print(f"   [bold red]Error:[/bold red] {str(e)}")
+            
+            return None
+            
     return result
 
 # This function takes a list of authors and formats it into a single string.
