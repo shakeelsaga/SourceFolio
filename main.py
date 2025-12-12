@@ -1,3 +1,5 @@
+# SourceFolio/main.py
+
 # This is the main script that orchestrates the entire research process.
 # It brings together all the different modules to fetch, process, and export data.
 
@@ -11,6 +13,7 @@ from processing import utils
 import warnings
 import wikipedia as wp
 import sys
+import os 
 from processing.ui import (
     splash,
     prompt_keywords,
@@ -76,7 +79,7 @@ def check_and_prompt_for_api_key():
                         continue
                     else:
                         exit_message()
-                        sys.exit(0)
+                        os._exit(0)  
 
         elif action == "remove":
             save_api_key(None, "NEWS_API_KEY")
@@ -121,7 +124,7 @@ def check_and_prompt_for_api_key():
                     continue
                 else:
                     exit_message()
-                    sys.exit(0)
+                    os._exit(0)  
 
         if validation_success:
             break
@@ -325,7 +328,7 @@ def main():
                 console.print("\n[warn]⚠️ No keywords entered.[/warn]")
                 if not inquirer.confirm(message="Do you want to try again?", default=True).execute():
                     exit_message()
-                    sys.exit(0)
+                    os._exit(0)
                 else:
                     continue
 
@@ -392,6 +395,7 @@ def main():
                     continue
                 else:
                     exit_message()
+                    os._exit(0) 
                     break
 
             else:
@@ -426,12 +430,13 @@ def main():
                 continue
             else:
                 exit_message()
+                os._exit(0)  
                 break
 
     # I'm handling the KeyboardInterrupt exception to exit gracefully.
     except KeyboardInterrupt:
         console.print("\n\n[bold red]Program interrupted by user. Exiting.[/bold red]")
-        sys.exit(0)
+        os._exit(0)  
 
 # This is the entry point of the script.
 if __name__ == "__main__":
