@@ -1,5 +1,3 @@
-# SourceFolio/main.py
-
 # This is the main script that orchestrates the entire research process.
 # It brings together all the different modules to fetch, process, and export data.
 

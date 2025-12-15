@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sourcefolio"
-# You must bump the version to upload a fix
 version = "1.0.10"
 authors = [
   { name="shakeelsaga", email="shakeelmohammedofficial@gmail.com" },
